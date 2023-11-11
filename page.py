@@ -191,10 +191,25 @@ class Page:
         restart = html.new_tag("a")
         restart.string = "Restart"
         restart['class'] = "styledLink prev"
-        restart['href'] = "../index.html"
+        if self.root == self:
+            restart['href'] = "./index.html"
+        else:
+            restart['href'] = "../index.html"
+
+        #Link to go to outline
+        outline = html.new_tag("a")
+        outline.string = "Outline"
+        outline['class'] = "styledLink prev"
+        if self.root == self:
+            outline['href'] = "./outline.html"
+        else:
+            outline['href'] = "../outline.html"
+
+
 
         #Add subelements to linkContainer
         persistent.append(restart)
+        persistent.append(outline)
         persistent.append(original)
         linkContainer.append(persistent)
 
