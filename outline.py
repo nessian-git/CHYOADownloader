@@ -29,7 +29,11 @@ class Outline:
         soup = BeautifulSoup('', 'html.parser')
         list = soup.new_tag('ul')
         list.append(self.traverse(self.root, soup))
-        body.append(list)
+
+        container_div = soup.new_tag("div", **{"class": "container"})
+        container_div.append(list)
+
+        body.append(container_div)
 
         with open(f'{path}/outline.html', 'w', encoding="utf-8") as file:
             # Further file processing goes here
