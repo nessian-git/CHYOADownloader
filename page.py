@@ -13,11 +13,14 @@ class Page:
         self.content = BeautifulSoup(requests.get(url).text,'html.parser')
         self.filename = self.slugify(filename)+".html"
         self.downloadImages = downloadImages
+        self.name = name
         #Name root directory according to story title
         if root == None:
             self.root = self
             self.traversed = []
-            self.dir = dir + "/" + self.content.find("h1").text.strip()
+            title = self.content.find("h1").text.strip()
+            self.dir = dir + "/" + title
+            self.name = title
             self.pageCurrent = 0
             os.makedirs(self.dir+"/images", exist_ok=True)
             os.makedirs(self.dir+"/chapters", exist_ok=True)
@@ -25,7 +28,6 @@ class Page:
 
         self.parent = parent
         self.url = url
-        self.name = name
         self.id = id
         self.propagate = propagate
 
