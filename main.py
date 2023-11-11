@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--links', help="Comma-separated list of CHYOA URLS. Can provide just one URL without comma for single download", type=str)
 parser.add_argument('--images', help="Download images", type=bool, default=True)
 parser.add_argument('--directory','-d', help="Directory to store downloaded files", default=os.getcwd(), type=str)
-parser.add_argument('--download_delay','-e', help="Wait this many seconds between download requests to avoid overloading the server", default=0, type=int)
+parser.add_argument('--download_delay','-e', help="Wait this many seconds between download requests to avoid overloading the server", default=0, type=float)
 
 args = vars(parser.parse_args())
 
