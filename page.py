@@ -17,7 +17,7 @@ class Page:
         if root == None:
             self.root = self
             self.traversed = []
-            self.dir = dir + "/" + self.content.find("h1").text
+            self.dir = dir + "/" + self.content.find("h1").text.strip()
             self.pageCurrent = 0
             os.makedirs(self.dir+"/images", exist_ok=True)
             os.makedirs(self.dir+"/chapters", exist_ok=True)
