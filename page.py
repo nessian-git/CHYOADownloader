@@ -177,24 +177,19 @@ class Page:
             back['href'] = "../index.html" if self.parent==self.root else self.parent.filename
             back['class'] = "styledLink prev"
             persistent.append(back)
+
+            #Link to return to beginning
+            restart = html.new_tag("a")
+            restart.string = "Restart"
+            restart['class'] = "styledLink prev"
+            if self.root == self:
+                restart['href'] = "./index.html"
+            else:
+                restart['href'] = "../index.html"
+            persistent.append(restart)
         except AttributeError:
             #Case for first chapter
             pass
-        
-        #Link to original page on chyoa.com
-        original = html.new_tag('a')
-        original.string = "Link to Original"
-        original['class'] = "styledLink"
-        original['href'] = self.url
-
-        #Link to return to beginning
-        restart = html.new_tag("a")
-        restart.string = "Restart"
-        restart['class'] = "styledLink prev"
-        if self.root == self:
-            restart['href'] = "./index.html"
-        else:
-            restart['href'] = "../index.html"
 
         #Link to go to outline
         outline = html.new_tag("a")
@@ -205,10 +200,13 @@ class Page:
         else:
             outline['href'] = "../outline.html"
 
-
+        #Link to original page on chyoa.com
+        original = html.new_tag('a')
+        original.string = "Link to Original"
+        original['class'] = "styledLink"
+        original['href'] = self.url
 
         #Add subelements to linkContainer
-        persistent.append(restart)
         persistent.append(outline)
         persistent.append(original)
         linkContainer.append(persistent)
