@@ -1,6 +1,7 @@
 import argparse
 import os
 from page import Page
+from outline import Outline
 
 import sys
 
@@ -39,6 +40,10 @@ with recursionlimit(30000):
             print("Building HTML Files")
             page.createHTML()
             print("Download Complete")
+            print("Creating outline")
+            outline = Outline(page)
+            outline.createHTML()
+            print("Outline Created")
         print("All Files Downloaded")
     else:
         print("Collecting Links")
