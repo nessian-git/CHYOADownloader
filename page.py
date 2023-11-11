@@ -4,10 +4,11 @@ import os
 import unicodedata
 import re
 import shutil
+import time
 
 
 class Page:
-    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, id=0, propagate=True):
+    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, id=0, propagate=True, download_delay=0):
         self.root = root
         self.dir = dir
         self.content = BeautifulSoup(requests.get(url).text,'html.parser')
@@ -30,6 +31,7 @@ class Page:
         self.url = url
         self.id = id
         self.propagate = propagate
+        self.download_delay = download_delay
 
         if propagate:
             self.root.pageCurrent += 1
@@ -69,12 +71,13 @@ class Page:
         #Create new Page for each link in div
         count = 1
         for i in links.find_all("a", class_=""):
+            time.sleep(self.download_delay)
             href = i['href']
 
             if (not (href in self.root.known.keys())):
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, id=self.id+count)
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, id=self.id+count, download_delay=self.download_delay)
             else:
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, id=self.id+count, propagate=False)
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, id=self.id+count, propagate=False, download_delay=self.download_delay)
 
             self.children.append(child)
             count+= 1
