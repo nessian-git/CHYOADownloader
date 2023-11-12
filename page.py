@@ -8,7 +8,7 @@ import time
 
 
 class Page:
-    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, id=0, propagate=True, download_delay=0, path="0"):
+    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, propagate=True, download_delay=0, path="0"):
         self.root = root
         self.dir = dir
         self.content = BeautifulSoup(requests.get(url).text,'html.parser')
@@ -29,7 +29,6 @@ class Page:
 
         self.parent = parent
         self.url = url
-        self.id = id
         self.propagate = propagate
         self.download_delay = download_delay
         self.path = path
@@ -41,19 +40,6 @@ class Page:
             self.root.known[url] = filename
             self.getChildren()
 
-
-
-    def recurseParents(self):
-        return ""
-        ''' current = self.parent
-        ids = [self.id]
-        while current != None:
-            ids.append(current.id)
-            current = current.parent
-        retval = ""
-        for i in ids:
-            retval = retval + str(i) + " to "
-        return retval[:-3]'''
 
     def __str__(self):
         retval = "Children: \n"
@@ -76,9 +62,9 @@ class Page:
             href = i['href']
 
             if (not (href in self.root.known.keys())):
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, id=self.id+count, download_delay=self.download_delay, path=f"{self.path}.{count}")
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, download_delay=self.download_delay, path=f"{self.path}.{count}")
             else:
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, id=self.id+count, propagate=False, download_delay=self.download_delay, path=f"{self.path}.{count}")
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=f"{self.path}.{count}")
 
             self.children.append(child)
             count+= 1
