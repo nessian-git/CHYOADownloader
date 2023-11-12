@@ -61,10 +61,15 @@ class Page:
             time.sleep(self.download_delay)
             href = i['href']
 
+            #if count is 1, simply add period to path
+            new_path = f"{self.path}."
+            if count > 1 or self.path == "0":
+                new_path += f"{count}"
+              
             if (not (href in self.root.known.keys())):
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, download_delay=self.download_delay, path=f"{self.path}.{count}")
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, download_delay=self.download_delay, path=new_path)
             else:
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=f"{self.path}.{count}")
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=new_path)
 
             self.children.append(child)
             count+= 1
