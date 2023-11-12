@@ -1,16 +1,10 @@
-import requests
 from bs4 import BeautifulSoup
-import os
-import unicodedata
-import re
-import shutil
 from page import Page
 
 class Outline:
     def __init__(self, root: Page) -> None:
         self.root = root
         
-
     def createHTML(self):
         path = self.root.dir
 
@@ -36,7 +30,6 @@ class Outline:
         body.append(container_div)
 
         with open(f'{path}/outline.html', 'w', encoding="utf-8") as file:
-            # Further file processing goes here
             file.write(str(html))
 
     def traverse(self, page: Page, soup: BeautifulSoup):
@@ -54,4 +47,3 @@ class Outline:
                 ul_tag.append(self.traverse(child, soup))
             li_tag.append(ul_tag)
         return li_tag
-
