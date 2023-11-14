@@ -8,7 +8,7 @@ import time
 
 
 class Page:
-    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, propagate=True, download_delay=0, path="0"):
+    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, propagate=True, download_delay=0, path="0", depth=0, depth_path="0"):
         self.root = root
         self.dir = dir
         self.content = BeautifulSoup(requests.get(url).text,'html.parser')
@@ -32,6 +32,8 @@ class Page:
         self.propagate = propagate
         self.download_delay = download_delay
         self.path = path
+        self.depth = depth
+        self.depth_path = depth_path
 
         if propagate:
             self.root.pageCurrent += 1
@@ -67,9 +69,9 @@ class Page:
                 new_path += f"{count}"
               
             if (not (href in self.root.known.keys())):
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, download_delay=self.download_delay, path=new_path)
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, download_delay=self.download_delay, path=new_path, depth=self.depth+1, depth_path=f"{self.depth}.{count}")
             else:
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=new_path)
+                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=new_path,depth=self.depth+1, depth_path=f"{self.depth}.{count}")
 
             self.children.append(child)
             count+= 1

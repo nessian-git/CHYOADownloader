@@ -38,7 +38,7 @@ class Outline:
             a_tag = soup.new_tag("a", href=page.filename)
         else:
             a_tag = soup.new_tag("a", href=f"chapters/{page.filename}") 
-        a_tag.string = page.name
+        a_tag.string = f"{page.depth_path} - {page.name}"
         li_tag.append(a_tag)
 
         if page.children:
