@@ -41,7 +41,7 @@ class Outline:
         a_tag.string = f"{page.depth_path} - {page.name}"
         li_tag.append(a_tag)
 
-        if page.children:
+        if hasattr(page, 'children') and page.children:
             ul_tag = soup.new_tag("ul")
             for child in page.children:
                 ul_tag.append(self.traverse(child, soup))

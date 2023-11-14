@@ -34,6 +34,7 @@ class Page:
         self.path = path
         self.depth = depth
         self.depth_path = depth_path
+        self.children = []
 
         if propagate:
             self.root.pageCurrent += 1
@@ -54,7 +55,6 @@ class Page:
 
 
     def getChildren(self):
-        self.children = []
         temp = self.content.find("div",class_="question-content")
         links = BeautifulSoup(str(temp), 'html.parser')
         #Create new Page for each link in div
