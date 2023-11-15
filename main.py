@@ -19,6 +19,7 @@ class recursionlimit:
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--links', help="Comma-separated list of CHYOA URLS. Can provide just one URL without comma for single download", type=str)
+parser.add_argument("--file", "-f", help="A path to a text file containing a list of links (one link per line).", type=str)
 parser.add_argument('--images', help="Download images", type=bool, default=True)
 parser.add_argument('--directory','-d', help="Directory to store downloaded files", default=os.getcwd(), type=str)
 parser.add_argument('--download_delay','-e', help="Wait this many seconds between download requests to avoid overloading the server", default=0, type=float)
@@ -31,8 +32,20 @@ args = vars(parser.parse_args())
 
 with recursionlimit(30000):
     print(sys.getrecursionlimit())
-    links = []
-    for i in args['links'].split(","):
+    links = set()
+    if args['links'] is not None:
+        links.update(args['links'].split(","))
+
+    if args['file'] is not None:
+        print(f"Reading Story Links From {args['file']}")
+        with open(args['file'], "r") as f:
+            # Remove any line that doesn't start with https
+            lines = [line.strip() for line in f.readlines() if line.startswith("https")]
+            links.update(lines)
+
+    print(f"Downloading {len(links)} Total Stories")
+
+    for i in links:
         print("Collecting Links From " + i)
         page = Page(i, "", args['directory'], args['images'], download_delay=max(0, args['download_delay']))
         print("Links Collected")
