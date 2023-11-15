@@ -19,7 +19,7 @@ class Page:
         if root == None:
             self.root = self
             self.traversed = []
-            title = self.content.find("h1").text.strip()
+            title = self.sanitize_title(self.content.find("h1").text)
             self.dir = dir + "/" + title
             self.name = title
             self.pageCurrent = 0
@@ -279,8 +279,9 @@ class Page:
             thing = thing[::248]
         return thing
 
-
-
+    # Replace invalid characters with an empty string and strip trailing whitespace
+    def sanitize_title(self, title: str) -> str:
+        return re.sub(r'[<>:"/\\|?*]', '', title).strip()
 
 
 if __name__ == "__main__":
