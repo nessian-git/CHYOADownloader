@@ -32,20 +32,23 @@ args = vars(parser.parse_args())
 
 with recursionlimit(30000):
     print(sys.getrecursionlimit())
-    links = set()
+    links = []
+    finished = set()
     if args['links'] is not None:
-        links.update(args['links'].split(","))
+        links += args['links'].split(",")
 
     if args['file'] is not None:
         print(f"Reading Story Links From {args['file']}")
         with open(args['file'], "r") as f:
             # Remove any line that doesn't start with https
-            lines = [line.strip() for line in f.readlines() if line.startswith("https")]
-            links.update(lines)
+            links += [line.strip() for line in f.readlines() if line.startswith("https")]
 
     print(f"Downloading {len(links)} Total Stories")
 
     for i in links:
+        if i in finished:
+            print("Already Downloaded " + i)
+            continue
         print("Collecting Links From " + i)
         page = Page(i, "", args['directory'], args['images'], download_delay=max(0, args['download_delay']))
         print("Links Collected")
@@ -56,4 +59,5 @@ with recursionlimit(30000):
         outline = Outline(page)
         outline.createHTML()
         print("Outline Created")
+        finished.add(i)
     print("All Files Downloaded")
