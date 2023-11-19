@@ -40,7 +40,8 @@ class Page:
         self.children = []
 
         if propagate:
-            print(str(self.root.pageCurrent) + " Links Scraped" + " | Parent chain: " + self.path)  
+            link_total = self.root.pageCurrent + 1 
+            print(f"{link_total} Links Scraped | Parent chain: {self.path}")  
 
             self.root.known[url] = self.filename
             self.getChildren()
