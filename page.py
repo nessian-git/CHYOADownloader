@@ -8,11 +8,10 @@ import time
 
 
 class Page:
-    def __init__(self, url, name, dir, downloadImages, filename="index", root=None, parent=None, propagate=True, download_delay=0, path="0", depth=0, depth_path="0"):
+    def __init__(self, url, name, dir, downloadImages, root=None, parent=None, propagate=True, download_delay=0, path="0", depth=0, depth_path="0"):
         self.root = root
         self.dir = dir
         self.content = BeautifulSoup(requests.get(url).text,'html.parser')
-        self.filename = self.slugify(filename)+".html"
         self.downloadImages = downloadImages
         self.name = name
         #Name root directory according to story title
@@ -23,9 +22,13 @@ class Page:
             self.dir = dir + "/" + title
             self.name = title
             self.pageCurrent = 0
+            self.filename = "index.html"
             os.makedirs(self.dir+"/images", exist_ok=True)
             os.makedirs(self.dir+"/chapters", exist_ok=True)
             self.known = {}
+        else:
+            self.root.pageCurrent += 1
+            self.filename = f"{self.root.pageCurrent}.html"
 
         self.parent = parent
         self.url = url
@@ -37,11 +40,12 @@ class Page:
         self.children = []
 
         if propagate:
-            self.root.pageCurrent += 1
             print(str(self.root.pageCurrent) + " Links Scraped" + " | Parent chain: " + self.path)  
 
-            self.root.known[url] = filename
+            self.root.known[url] = self.filename
             self.getChildren()
+        else:
+            self.filename = self.root.known.get(url)
 
 
     def __str__(self):
@@ -69,9 +73,9 @@ class Page:
                 new_path += f"{count}"
               
             if (not (href in self.root.known.keys())):
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.name+"-"+i.text,root=self.root, parent=self, download_delay=self.download_delay, path=new_path, depth=self.depth+1, depth_path=f"{self.depth}.{count}")
+                child = Page(href,i.text, self.dir, self.downloadImages,root=self.root, parent=self, download_delay=self.download_delay, path=new_path, depth=self.depth+1, depth_path=f"{self.depth}.{count}")
             else:
-                child = Page(href,i.text, self.dir, self.downloadImages,filename=self.root.known.get(href),root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=new_path,depth=self.depth+1, depth_path=f"{self.depth}.{count}")
+                child = Page(href,i.text, self.dir, self.downloadImages,root=self.root, parent=self, propagate=False, download_delay=self.download_delay, path=new_path,depth=self.depth+1, depth_path=f"{self.depth}.{count}")
 
             self.children.append(child)
             count+= 1
