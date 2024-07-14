@@ -1,63 +1,69 @@
-body{
-    background-color:rgb(252, 252, 252);
+body {
+    background-color: rgb(22, 28, 45); /* Dark background color */
+    color: rgb(252, 252, 252); /* Light text color */
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.linkContainer a, .linkContainer p{
-    display:block;
-    text-align:center
+.linkContainer a, .linkContainer p {
+    display: block;
+    text-align: center;
 }
 
-a{
-    color:rgb(22, 28, 45)
+a {
+    color: rgb(173, 216, 230); /* Light blue link color */
 }
 
-.persistent a{
-    width:100%;
-    text-align:left;
-    display:inline;
+.persistent a {
+    width: 100%;
+    text-align: left;
+    display: inline;
 }
 
-.persistent{
-    margin-top:10px;
+.persistent {
+    margin-top: 10px;
 }
 
-.prev{
-    margin-right:10px
+.prev {
+    margin-right: 10px;
 }
 
-.chapterLinks{
-    border-top: 1px;
-    text-decoration:none;
-    background-color:rgb(235, 235, 235);
+.chapterLinks {
+    border-top: 1px solid rgb(173, 216, 230); /* Light blue border */
+    text-decoration: none;
+    background-color: rgb(30, 40, 60); /* Dark background for links */
 }
 
-img{
-    max-height:50vh;
+img {
+    max-width: 100%; /* Ensures the image scales with the width of the container */
+    height: auto; /* Maintains the aspect ratio */
+    display: block; /* Centers the image */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.chapterLinks:hover{
-    filter:opacity(0.75);
+.chapterLinks:hover {
+    filter: opacity(0.75);
 }
 
-p, h1, h2{
+p, h1, h2 {
     font-family: 'Open Sans', sans-serif;
 }
 
-header{
-    text-align:center;
+header {
+    text-align: center;
 }
 
-.styledLink{
-    background-color:rgb(235, 235, 235);
-    border-radius:0.2rem;
-    padding:0.2rem;
-    text-decoration:none;
+.styledLink {
+    background-color: rgb(30, 40, 60); /* Dark background for styled links */
+    color: rgb(173, 216, 230); /* Light blue text */
+    border-radius: 0.2rem;
+    padding: 0.2rem;
+    text-decoration: none;
 }
 
-.styledLink:hover{
-    filter:opacity(0.75);
+.styledLink:hover {
+    filter: opacity(0.75);
 }
 
 ul {
@@ -71,12 +77,12 @@ li {
 }
 
 a {
-    text-decoration: none; /* Optional: Removes the underline from links */
+    text-decoration: none; /* Removes the underline from links */
     white-space: nowrap; /* Prevents the text inside the link from wrapping */
 }
 
 a:hover {
-    outline: 1px solid #000; /* Adds an outline on hover */
+    outline: 1px solid rgb(173, 216, 230); /* Light blue outline on hover */
 }
 
 /* Style for the container to enable horizontal scrolling */
