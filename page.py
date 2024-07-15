@@ -5,15 +5,18 @@ import unicodedata
 import re
 import shutil
 import time
-
+import browser_cookie3
 
 class Page:
     def __init__(self, url, name, dir, downloadImages, root=None, parent=None, propagate=True, download_delay=0, path="0", depth=0, depth_path="0"):
         self.root = root
         self.dir = dir
-        self.content = BeautifulSoup(requests.get(url).text,'html.parser')
         self.downloadImages = downloadImages
         self.name = name
+        # Get cookies from the browser
+        self.cookies = browser_cookie3.firefox()  # or browser_cookie3.vivaldi() for vivaldi, chrome() for chrome etc...
+        # Fetch page content using cookies for authentication
+        self.content = BeautifulSoup(requests.get(url, cookies=self.cookies).text, 'html.parser')
         #Name root directory according to story title
         if root == None:
             self.root = self
@@ -48,7 +51,6 @@ class Page:
         else:
             self.filename = self.root.known.get(url)
 
-
     def __str__(self):
         retval = "Children: \n"
         try:
@@ -57,7 +59,6 @@ class Page:
         except AttributeError:
             pass
         return retval
-
 
     def getChildren(self):
         temp = self.content.find("div",class_="question-content")
@@ -117,9 +118,7 @@ class Page:
                 image['src'] = savePath
 
         head = html.find("head")
-        
         stylesheet = [link for link in html.findAll("link") if "style.css" in link.get("href", [])][0]
-
         body = html.find("body")
 
 
@@ -219,9 +218,7 @@ class Page:
         if self.root == self:
             #index.html file in root directory
             published = open(self.dir+"/index.html", 'w', encoding='utf-8')
-
             stylesheet['href'] = "chapters/style.css"
-
             css = open(self.dir+"/chapters/style.css", 'w', encoding='utf-8')
             with open('default.css', 'r') as f:
                 css.write(f.read())
@@ -237,7 +234,7 @@ class Page:
 
     def saveImage(self, url, file):
         try:
-            r = requests.get(url, stream = True)
+            r = requests.get(url, stream=True, cookies=self.cookies)
         except requests.exceptions.MissingSchema:
             r = requests.get("http://" + url, stream=True)
         except requests.exceptions.SSLError:
